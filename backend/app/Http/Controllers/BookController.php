@@ -32,9 +32,9 @@ class BookController extends Controller
         $book = Books::create([
             'title' => $request->title,
             'isbn' => $request->isbn,
-            'publication_year' => $request->publicationYear, 
-            'number_of_copies' => $request->availableCopies, 
-            'categories' => $request->genre,
+            'publication_year' => $request->publication_year, 
+            'number_of_copies' => $request->number_of_copies, 
+            'categories' => $request->categories,
             ]);
         if($book) {
             return response()->json([
@@ -52,9 +52,9 @@ class BookController extends Controller
                 ->update([
                     'title' => $request->title,
                     'isbn' => $request->isbn,
-                    'publication_year' => $request->publicationYear, 
-                    'number_of_copies' => $request->availableCopies, 
-                    'categories' => $request->genre,
+                    'publication_year' => $request->publication_year, 
+                    'number_of_copies' => $request->number_of_copies, 
+                    'categories' => $request->categories,
                 ]);
         if ($book) {
             $book = Books::find($id);
