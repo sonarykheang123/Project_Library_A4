@@ -8,7 +8,7 @@ use App\Models\Authors;
 class AuthorController extends Controller
 {
     public function index(){
-        $author = new Authors;        
+        $authors = new Authors;        
         return response()->json([
             "message"=> "Here is the list of all authors",
             "data"=> $authors::all(),
@@ -35,7 +35,7 @@ class AuthorController extends Controller
             'number_of_books_written' => $request->number_of_books_written ?? 0,
             'nationality' => $request->nationality,
             ]);
-        if($book) {
+        if($author) {
             return response()->json([
                 "message"=> "Created Author successfully",
                 "data"=> $author,
