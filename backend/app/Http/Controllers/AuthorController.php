@@ -4,11 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Author;
-
 class AuthorController extends Controller
 {
     public function index(){
-        $authors = new Authors;
+        $authors = new Author;        
         return response()->json([
             "message"=> "Here is the list of all authors",
             "data"=> $authors::all(),
@@ -16,7 +15,7 @@ class AuthorController extends Controller
     }
 
     public function get(int $id) {
-        $author = Authors::find($id);
+        $author = Author::find($id);
 
         if ($author) {
             return response()->json([
@@ -29,13 +28,13 @@ class AuthorController extends Controller
     }
 
     public function add(Request $request) {
-        $authors = Authors::create([
+        $author = Author::create([
             'name' => $request->name,
             'date_of_birth' => $request->date_of_birth,
             'number_of_books_written' => $request->number_of_books_written ?? 0,
             'nationality' => $request->nationality,
             ]);
-        if($book) {
+        if($author) {
             return response()->json([
                 "message"=> "Created Author successfully",
                 "data"=> $author,
@@ -47,7 +46,7 @@ class AuthorController extends Controller
     }
 
     public function update(Request $request, int $id) {
-        $author = Authors::where('id', $id)
+        $author = Author::where('id', $id)
                 ->update([
                     'name' => $request->name,
                     'date_of_birth' => $request->date_of_birth,
@@ -55,7 +54,7 @@ class AuthorController extends Controller
                     'nationality' => $request->nationality,
                 ]);
         if ($author) {
-            $author = Authors::find($id);
+            $author = Author::find($id);
             return response()->json([
                 'message' => "Author updated successfully",
                 'data' => $author,
@@ -68,7 +67,7 @@ class AuthorController extends Controller
     }
 
     public function delete(int $id) {
-        $author = Authors::where('id', $id)->delete();
+        $author = Author::where('id', $id)->delete();
         if($author){
             return response()->json([
                 'message' => "Name deleted successfully",
