@@ -7,117 +7,77 @@ use App\Models\Author;
 
 class AuthorController extends Controller
 {
-    // Get all authors
-    public function index() {
-        $authors = Author::all();
-
+    public function index(){
+        $authors = new Authors;
         return response()->json([
-            'message' => 'Authors retrieved successfully!',
-            'data' => $authors
+            "message"=> "Here is the list of all authors",
+            "data"=> $authors::all(),
         ], 200);
     }
 
-    // Get a single author by ID
-    public function show(int $id) {
-        $author = Author::find($id);
+    public function get(int $id) {
+        $author = Authors::find($id);
 
         if ($author) {
             return response()->json([
-                'message' => 'Author found!',
-                'data' => $author
+                'data' => $author,
             ], 200);
         }
-
-        return response()->json([
-            'message' => 'Author not found!'
-        ], 404);
-    }
-
-    // Count all authors
-    public function count() {
-        $count = Author::count();
-
-        return response()->json([
-            'message' => 'Author count retrieved successfully!',
-            'data' => $count
+        return response() ->json([
+            'message' => 'Author not found',
         ], 200);
     }
 
-    // Create a new author
-    public function create(Request $request) {
-        // Just check if name is given, no formal validation
-        if (!$request->name) {
-            return response()->json([
-                "message" => "Name field is required"
-            ], 400);
-        }
-
-        $author = Author::create([
+    public function add(Request $request) {
+        $authors = Authors::create([
             'name' => $request->name,
             'date_of_birth' => $request->date_of_birth,
             'number_of_books_written' => $request->number_of_books_written ?? 0,
             'nationality' => $request->nationality,
-        ]);
-
-        if ($author) {
+            ]);
+        if($book) {
             return response()->json([
-                "message" => "Author created successfully",
-                "data" => $author
-            ], 201);
+                "message"=> "Created Author successfully",
+                "data"=> $author,
+            ], 200);
         }
-
         return response()->json([
-            "message" => "Failed to create author"
-        ], 400);
+            "message" => "Failed to create author",
+        ], 203);
     }
 
-    // Edit (update) an author
-    public function edit(Request $request, int $id) {
-        if (!$request->name) {
+    public function update(Request $request, int $id) {
+        $author = Authors::where('id', $id)
+                ->update([
+                    'name' => $request->name,
+                    'date_of_birth' => $request->date_of_birth,
+                    'number_of_books_written' => $request->number_of_books_written ?? 0,
+                    'nationality' => $request->nationality,
+                ]);
+        if ($author) {
+            $author = Authors::find($id);
             return response()->json([
-                "message" => "Name field is required"
-            ], 400);
-        }
-
-        $author = Author::find($id);
-
-        if (!$author) {
-            return response()->json([
-                "message" => "Author not found"
-            ], 404);
-        }
-
-        $updated = $author->update([
-            'name' => $request->name,
-        ]);
-
-        if ($updated) {
-            return response()->json([
-                "message" => "Author updated successfully",
-                "data" => $author
+                'message' => "Author updated successfully",
+                'data' => $author,
             ], 200);
         }
 
         return response()->json([
-            "message" => "Failed to update author"
-        ], 400);
+            'message' => 'Failed to update author',
+        ], 203);
     }
 
-    // Delete an author
     public function delete(int $id) {
-        $author = Author::find($id);
-
-        if (!$author) {
+        $author = Authors::where('id', $id)->delete();
+        if($author){
             return response()->json([
-                'message' => 'Author not found!'
-            ], 404);
+                'message' => "Name deleted successfully",
+            ], 201);
         }
-
-        $author->delete();
-
-        return response()->json([
-            'message' => 'Author deleted successfully!',
-            'id' => $id
-        ], 200);
-    }
+        else{
+            return response()->json([
+                'message' => 'Failed to delete author name',
+            ], 203);
+        };
+    } 
 }
