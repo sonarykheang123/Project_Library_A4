@@ -1,8 +1,5 @@
 <template>
-    <div>
-        <h1 class="text-3xl font-semibold p-4 text-center">AUTHORPAGE</h1>
-        
-    </div>
+    <h1>Author Page</h1>
 </template>
 
 <script setup>

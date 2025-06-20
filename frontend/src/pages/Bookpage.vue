@@ -1,8 +1,5 @@
 <template>
-    <div>
-        <h1 class="text-3xl font-semibold p-4 text-center">BOOKPAGE</h1>
-        
-    </div>
+    <h1>Book Page</h1>
 </template>
 
 <script setup>
