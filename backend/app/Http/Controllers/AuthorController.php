@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Author;
+use App\Models\Authors;
 
 class AuthorController extends Controller
 {
     public function index(){
-        $authors = new Authors;
+        $author = new Authors;        
         return response()->json([
             "message"=> "Here is the list of all authors",
             "data"=> $authors::all(),
