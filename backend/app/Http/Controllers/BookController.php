@@ -24,7 +24,7 @@ class BookController extends Controller
             ], 200);
         }
         return response() ->json([
-            'message' => 'Post not found',
+            'message' => 'Book not found',
         ], 200);
     }
 
@@ -43,7 +43,7 @@ class BookController extends Controller
             ], 200);
         }
         return response()->json([
-            "message" => "Failed to create post",
+            "message" => "Failed to create book",
         ], 203);
     }
 
@@ -59,13 +59,13 @@ class BookController extends Controller
         if ($book) {
             $book = Books::find($id);
             return response()->json([
-                'message' => "Post updated successfully",
+                'message' => "Book updated successfully",
                 'data' => $book,
             ], 200);
         }
 
         return response()->json([
-            'message' => 'Failed to update post',
+            'message' => 'Failed to update book',
         ], 203);
     }
 
@@ -73,12 +73,12 @@ class BookController extends Controller
         $book = Books::where('id', $id)->delete();
         if($book){
             return response()->json([
-                'message' => "Post deleted successfully",
+                'message' => "Book deleted successfully",
             ], 201);
         }
         else{
             return response()->json([
-                'message' => 'Failed to delete post',
+                'message' => 'Failed to delete Book',
             ], 203);
         };
     } 
