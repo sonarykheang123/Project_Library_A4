@@ -1,68 +1,109 @@
 <template>
-  <div class="min-h-screen bg-gray-100 py-10 px-4">
-    <div class="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow-lg">
-      <h1 class="text-2xl font-bold mb-6 text-center text-blue-700">Member Management</h1>
+  <div class="min-h-screen bg-gray-50 py-12 px-4">
+    <div class="max-w-5xl mx-auto bg-white rounded-2xl shadow-xl p-8">
+      <!-- Header -->
+      <h1 class="text-3xl font-semibold text-blue-800 text-center mb-8">Member Management</h1>
 
       <!-- Add Member Form -->
-      <form @submit.prevent="addMember" class="mb-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <input v-model="newMember.name" placeholder="Full Name" required class="p-2 border rounded" />
-        <input v-model="newMember.email" placeholder="Email" required class="p-2 border rounded" />
-        <input v-model="newMember.phone" placeholder="Phone" required class="p-2 border rounded" />
-        <input v-model="newMember.address" placeholder="Address" required class="p-2 border rounded" />
-        <button type="submit" class="col-span-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
-          Add Member
-        </button>
+      <form @submit.prevent="addMember" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        <input v-model="newMember.name" placeholder="Full Name" required class="p-3 border border-gray-300 rounded-lg" />
+        <input v-model="newMember.email" placeholder="Email" required class="p-3 border border-gray-300 rounded-lg" />
+        <input v-model="newMember.phone" placeholder="Phone" required class="p-3 border border-gray-300 rounded-lg" />
+        <input v-model="newMember.address" placeholder="Address" required class="p-3 border border-gray-300 rounded-lg" />
+
+        <!-- Buttons aligned to right -->
+        <div class="md:col-span-2 flex justify-end gap-3">
+          <button type="button"
+                  @click="clearForm"
+                  class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition text-sm">
+            Cancel
+          </button>
+          <button type="submit"
+                  class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-sm">
+            Add
+          </button>
+        </div>
       </form>
 
       <!-- Search -->
-      <input
-        v-model="searchQuery"
-        placeholder="Search by ID or Name"
-        class="w-full mb-4 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
+      <div class="mb-6 flex gap-3 items-center">
+        <input v-model="searchQuery"
+               placeholder="Search by ID or Name"
+               class="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
+        <button @click="searchAction"
+                class="bg-blue-600 text-white px-5 py-3 rounded-lg hover:bg-blue-700 transition font-semibold shadow-md text-sm">
+          🔍 Search
+        </button>
+      </div>
 
       <!-- Member Table -->
-      <table class="w-full border border-gray-300 rounded text-left">
-        <thead class="bg-gray-200">
-          <tr>
-            <th class="p-2">ID</th>
-            <th class="p-2">Name</th>
-            <th class="p-2">Email</th>
-            <th class="p-2">Phone</th>
-            <th class="p-2">Address</th>
-            <th class="p-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="member in filteredMembers" :key="member.id" class="border-t hover:bg-gray-100">
-            <template v-if="editingId === member.id">
-              <td>{{ member.id }}</td>
-              <td><input v-model="editMember.name" class="p-1 border rounded w-full" /></td>
-              <td><input v-model="editMember.email" class="p-1 border rounded w-full" /></td>
-              <td><input v-model="editMember.phone" class="p-1 border rounded w-full" /></td>
-              <td><input v-model="editMember.address" class="p-1 border rounded w-full" /></td>
-              <td>
-                <button @click="updateMember(member.id)" class="text-green-600">Save</button>
-                <button @click="cancelEdit" class="text-gray-500 ml-2">Cancel</button>
-              </td>
-            </template>
-            <template v-else>
-              <td class="p-2">{{ member.id }}</td>
-              <td class="p-2">{{ member.name }}</td>
-              <td class="p-2">{{ member.email }}</td>
-              <td class="p-2">{{ member.phone }}</td>
-              <td class="p-2">{{ member.address }}</td>
-              <td class="p-2">
-                <button @click="startEdit(member)" class="text-blue-600">Edit</button>
-                <button @click="deleteMember(member.id)" class="text-red-600 ml-2">Delete</button>
-              </td>
-            </template>
-          </tr>
-          <tr v-if="filteredMembers.length === 0">
-            <td colspan="6" class="text-center text-gray-500 p-4">No results found.</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="overflow-x-auto rounded-lg border border-gray-300 shadow-sm">
+        <table class="min-w-full divide-y divide-gray-200 text-gray-700 table-fixed">
+          <thead class="bg-blue-100 sticky top-0 z-10">
+            <tr>
+              <th class="w-1/12 p-4 text-left text-sm font-semibold text-blue-700">ID</th>
+              <th class="w-3/12 p-4 text-left text-sm font-semibold text-blue-700">Name</th>
+              <th class="w-3/12 p-4 text-left text-sm font-semibold text-blue-700">Email</th>
+              <th class="w-2/12 p-4 text-left text-sm font-semibold text-blue-700">Phone</th>
+              <th class="w-2/12 p-4 text-left text-sm font-semibold text-blue-700">Address</th>
+              <th class="w-1/12 p-4 text-left text-sm font-semibold text-blue-700">Actions</th>
+            </tr>
+          </thead>
+        </table>
+
+        <div class="max-h-60 overflow-y-auto">
+          <table class="min-w-full divide-y divide-gray-200 text-gray-700 table-fixed">
+            <tbody class="divide-y divide-gray-200">
+              <tr
+                v-for="member in filteredMembers"
+                :key="member.id"
+                :class="[
+                  editingId === member.id ? 'bg-yellow-50' : '',
+                  'hover:bg-blue-50 transition',
+                ]"
+              >
+                <template v-if="editingId === member.id">
+                  <td class="w-1/12 p-4 whitespace-nowrap text-sm">{{ member.id }}</td>
+                  <td class="w-3/12 p-4 whitespace-nowrap"><input v-model="editMember.name" class="w-full p-2 border rounded-lg" /></td>
+                  <td class="w-3/12 p-4 whitespace-nowrap"><input v-model="editMember.email" class="w-full p-2 border rounded-lg" /></td>
+                  <td class="w-2/12 p-4 whitespace-nowrap"><input v-model="editMember.phone" class="w-full p-2 border rounded-lg" /></td>
+                  <td class="w-2/12 p-4 whitespace-nowrap"><input v-model="editMember.address" class="w-full p-2 border rounded-lg" /></td>
+                  <td class="w-1/12 p-4 whitespace-nowrap flex gap-2">
+                    <button @click="updateMember(member.id)"
+                            class="bg-green-600 text-white px-3 py-1 rounded-lg hover:bg-green-700 transition">
+                      Save
+                    </button>
+                    <button @click="cancelEdit"
+                            class="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg hover:bg-gray-400 transition">
+                      Cancel
+                    </button>
+                  </td>
+                </template>
+                <template v-else>
+                  <td class="w-1/12 p-4 whitespace-nowrap text-sm">{{ member.id }}</td>
+                  <td class="w-3/12 p-4 whitespace-nowrap text-sm">{{ member.name }}</td>
+                  <td class="w-3/12 p-4 whitespace-nowrap text-sm">{{ member.email }}</td>
+                  <td class="w-2/12 p-4 whitespace-nowrap text-sm">{{ member.phone }}</td>
+                  <td class="w-2/12 p-4 whitespace-nowrap text-sm">{{ member.address }}</td>
+                  <td class="w-1/12 p-4 whitespace-nowrap flex gap-2">
+                    <button @click="startEdit(member)"
+                            class="bg-blue-600 text-white px-3 py-1 rounded-lg hover:bg-blue-700 transition">
+                      Edit
+                    </button>
+                    <button @click="deleteMember(member.id)"
+                            class="bg-red-600 text-white px-3 py-1 rounded-lg hover:bg-red-700 transition">
+                      Delete
+                    </button>
+                  </td>
+                </template>
+              </tr>
+              <tr v-if="filteredMembers.length === 0">
+                <td colspan="6" class="text-center text-gray-500 p-6 text-sm">No members found.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -79,23 +120,25 @@ const members = ref([
 const newMember = ref({ name: '', email: '', phone: '', address: '' })
 let nextId = members.value.length + 1
 
-const addMember = () => {
-  members.value.push({ id: nextId++, ...newMember.value })
-  newMember.value = { name: '', email: '', phone: '', address: '' }
-}
-
 const searchQuery = ref('')
 const filteredMembers = computed(() => {
-  const query = searchQuery.value.toLowerCase()
+  const q = searchQuery.value.toLowerCase()
   return members.value.filter(
-    m =>
-      m.name.toLowerCase().includes(query) ||
-      String(m.id).includes(query)
+    m => m.name.toLowerCase().includes(q) || String(m.id).includes(q)
   )
 })
 
 const editingId = ref(null)
 const editMember = ref({})
+
+const addMember = () => {
+  members.value.push({ id: nextId++, ...newMember.value })
+  clearForm()
+}
+
+const clearForm = () => {
+  newMember.value = { name: '', email: '', phone: '', address: '' }
+}
 
 const startEdit = (member) => {
   editingId.value = member.id
@@ -116,10 +159,16 @@ const updateMember = (id) => {
 }
 
 const deleteMember = (id) => {
-  members.value = members.value.filter(m => m.id !== id)
+  if (confirm('Are you sure you want to delete this member?')) {
+    members.value = members.value.filter(m => m.id !== id)
+  }
+}
+
+const searchAction = () => {
+  alert('Search triggered! (Optional)')
 }
 </script>
 
 <style scoped>
-/* optional custom styles */
+/* Tailwind manages styling */
 </style>
