@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\MemberController;
 use Illuminate\Http\Request;
@@ -28,7 +29,7 @@ Route::prefix("/books")->group(function() {
 
 //Authors
 Route::prefix("/authors")->group(function() {
-    Route::get("/", [AuthorControll::class, "index"])->name("allAuthors");
+    Route::get("/", [AuthorController::class, "index"])->name("allAuthors");
     Route::get("/{id}", [AuthorController::class, "show"]);
     Route::post("/store", [AuthorController::class, "store"]);
     Route::put("/update/{id}", [AuthorController::class, "update"]);
