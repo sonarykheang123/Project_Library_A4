@@ -3,6 +3,7 @@
     <Navigation />
   </header>
   <router-view></router-view>
+  <img />
 </template>
 <script setup>
 // components import
