@@ -1,6 +1,6 @@
 <template>
   <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 p-6 max-w-md">
-    <!-- Header with Avatar and Basic Info -->
+   
     <div class="flex items-start justify-between mb-4">
       <div class="flex items-center gap-4">
         <div class="w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center overflow-hidden">

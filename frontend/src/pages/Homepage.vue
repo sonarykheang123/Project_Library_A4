@@ -252,7 +252,7 @@ const features = ref([
 const handleSearch = () => {
   if (searchQuery.value.trim()) {
     console.log('Searching for:', searchQuery.value)
-    // Implement search functionality
+    
   }
 }
 </script>

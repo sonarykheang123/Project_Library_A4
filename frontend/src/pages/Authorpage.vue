@@ -61,17 +61,17 @@ const authors = ref([
 
 const handleEdit = (author) => {
   console.log('Edit author:', author)
-  // Implement edit functionality
+  
 }
 
 const handleDelete = (authorId) => {
   console.log('Delete author:', authorId)
-  // Implement delete functionality
+  
 }
 
 const handleViewBooks = (authorId) => {
   console.log('View books for author:', authorId)
-  // Navigate to books page filtered by author
+  
 }
 </script>
 
