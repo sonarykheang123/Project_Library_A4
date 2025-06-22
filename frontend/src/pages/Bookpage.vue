@@ -12,7 +12,7 @@
         </button>
 
         <!-- Add Book Form Modal -->
-  <div v-if="showAddForm" class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+  <div v-if="showAddForm" class="fixed inset-0 bg-gray-100 bg-opacity-30 flex items-center justify-center z-50">
     <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
       <h2 class="text-xl font-bold mb-4">Add New Book</h2>
       <form @submit.prevent="addBook">
@@ -21,12 +21,24 @@
           <input v-model="newBook.title" type="text" class="w-full border rounded px-3 py-1.5" required />
         </div>
         <div class="mb-3">
-          <label class="block mb-1 font-medium">EBN</label>
-          <input v-model="newBook.ebn" type="text" class="w-full border rounded px-3 py-1.5" required />
+          <label class="block mb-1 font-medium">Author</label>
+          <input v-model="newBook.author" type="text" class="w-full border rounded px-3 py-1.5" required />
+        </div>
+        <div class="mb-3">
+          <label class="block mb-1 font-medium">IsBn</label>
+          <input v-model="newBook.isbn" type="text" class="w-full border rounded px-3 py-1.5" required />
         </div>
         <div class="mb-3">
           <label class="block mb-1 font-medium">Publish Year</label>
           <input v-model="newBook.publicyear" type="number" class="w-full border rounded px-3 py-1.5" required />
+        </div>
+        <div class="mb-3">
+          <label class="block mb-1 font-medium">Number Copies</label>
+          <input v-model="newBook.numbercopy" type="number" class="w-full border rounded px-3 py-1.5" required />
+        </div>
+        <div class="mb-3">
+          <label class="block mb-1 font-medium">Categories</label>
+          <input v-model="newBook.category" type="text" class="w-full border rounded px-3 py-1.5" required />
         </div>
         <div class="flex gap-2 justify-end">
           <button type="button" @click="showAddForm = false" class="px-4 py-1 rounded bg-gray-200 hover:bg-gray-300">Cancel</button>
@@ -81,8 +93,11 @@ const books = ref([
 const showAddForm = ref(false);
 const newBook = ref({
   title: "",
-  ebn: "",
+  author: "",
+  isbn: "",
   publicyear: "",
+numbercopy: "",
+category: "",
 });
 
 function addBook() {
