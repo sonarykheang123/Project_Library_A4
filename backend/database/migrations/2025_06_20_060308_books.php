@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('isbn')->unique();  
             $table->year('publication_year'); 
             $table->integer('number_of_copies'); 
+            $table->string('url', 255);
             $table->string('categories'); 
             $table->timestamps(); 
         });

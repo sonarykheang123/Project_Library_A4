@@ -34,6 +34,7 @@ class BookController extends Controller
             'isbn' => $request->isbn,
             'publication_year' => $request->publication_year, 
             'number_of_copies' => $request->number_of_copies, 
+            'url' => $request->url,
             'categories' => $request->categories,
             ]);
         if($book) {
@@ -54,6 +55,7 @@ class BookController extends Controller
                     'isbn' => $request->isbn,
                     'publication_year' => $request->publication_year, 
                     'number_of_copies' => $request->number_of_copies, 
+                    'url' => $request->url,
                     'categories' => $request->categories,
                 ]);
         if ($book) {
