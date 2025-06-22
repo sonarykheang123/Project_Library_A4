@@ -25,7 +25,7 @@
         />
       </div>
 
-      <!-- Optional: No Results Message -->
+      <!-- No Results -->
       <p v-if="filteredAuthors.length === 0" class="text-center text-gray-500 mt-10">
         No authors found.
       </p>
@@ -35,68 +35,69 @@
 
 <script setup>
 import AuthorCard from '@/components/AuthorCard.vue'
-import { ref, computed } from 'vue'
+import axios from 'axios'
+import { onMounted, ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 
-// Search term
+const router = useRouter()
+const authors = ref([])
 const searchTerm = ref('')
 
-// Author data
-const authors = ref([
-  {
-    id: '1',
-    name: 'Jane Austen',
-    avatar: null,
-    bio: 'English novelist known for her six major novels...',
-    dateOfBirht: '1775-12-16',
-    nationality: 'British',
-    booksCount: 6,
-    rating: 4.8,
-    genres: ['Romance', 'Social Commentary', 'Classic Literature'],
-  },
-  {
-    id: '2',
-    name: 'Stephen King',
-    avatar: null,
-    bio: 'American author of horror, supernatural fiction...',
-    dateOfBirht: '1947-09-21',
-    nationality: 'American',
-    booksCount: 64,
-    rating: 4.6,
-    genres: ['Horror', 'Supernatural', 'Thriller', 'Fantasy'],
-  },
-  {
-    id: '3',
-    name: 'Agatha Christie',
-    avatar: null,
-    bio: 'English writer known for her sixty-six detective novels...',
-    dateOfBirht: '1890-09-15',
-    nationality: 'British',
-    booksCount: 66,
-    rating: 4.7,
-    genres: ['Mystery', 'Detective Fiction', 'Crime'],
+// Fetch authors
+onMounted(async () => {
+  try {
+    await axios
+      .get('http://127.0.0.1:8000/api/authors')
+      .then((res) => {
+        authors.value = res.data.data.map((author) => ({
+          ...author,
+          booksCount: author.number_of_books_written,
+          dateOfBirht: author.date_of_birth,
+          bio: '', // Placeholder
+        }))
+      })
+  } catch (e) {
+    console.error('Failed to fetch authors', e)
   }
-])
+})
 
-// Computed filtered authors
 const filteredAuthors = computed(() => {
-  return authors.value.filter(author =>
+  return authors.value.filter((author) =>
     author.name.toLowerCase().includes(searchTerm.value.toLowerCase())
   )
 })
 
-// Action handlers
-const handleEdit = (author) => {
-  console.log('Edit author:', author)
+const handleEdit = async (author) => {
+  const newName = prompt('Edit name:', author.name)
+  if (!newName) return
+
+  try {
+    await axios.put(`http://127.0.0.1:8000/api/authors/update/${author.id}`, {
+      name: newName,
+      date_of_birth: author.dateOfBirht,
+      nationality: author.nationality,
+      number_of_books_written: author.booksCount,
+    })
+
+    const index = authors.value.findIndex(a => a.id === author.id)
+    if (index !== -1) authors.value[index].name = newName
+  } catch (err) {
+    console.error('Failed to update author', err)
+  }
 }
 
-const handleDelete = (authorId) => {
-  console.log('Delete author:', authorId)
+const handleDelete = async (authorId) => {
+  if (!confirm('Are you sure you want to delete this author?')) return
+
+  try {
+    await axios.delete(`http://127.0.0.1:8000/api/authors/delete/${authorId}`)
+    authors.value = authors.value.filter(a => a.id !== authorId)
+  } catch (err) {
+    console.error('Failed to delete author', err)
+  }
 }
 
 const handleViewBooks = (authorId) => {
-  console.log('View books for author:', authorId)
+  router.push(`/authors/${authorId}/books`)
 }
 </script>
-
-<style lang="scss" scoped>
-</style>

@@ -1,65 +1,77 @@
 <template>
-        <h1 class="text-2xl font-bold text-center mb-6 p-5 m-3">Book Page</h1>
-        <input type="text" placeholder="Search books..." class="w-80 p-2 border border-gray-300 rounded-md mb-4 m-1 ml-236" />
-        <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <BookCard
-                    v-for="book in books"
-                    :key="book.id"
-                    :book="book"
-                    @edit="handleEdit"
-                    @delete="handleDelete"
-                    @viewDetails="handleViewDetails"
-                />
-            </div>  
-        </div>
+  <div class="min-h-screen bg-gray-50 pt-20">
+    <h1 class="text-2xl font-bold text-center mb-6 p-5 m-3">Book Page</h1>
+
+    <!-- Search Bar -->
+    <div class="flex justify-center mb-6">
+      <input
+        type="text"
+        v-model="searchTerm"
+        placeholder="Search books..."
+        class="w-full max-w-md p-2 border border-gray-300 rounded-md"
+      />
+    </div>
+
+    <!-- Book Cards -->
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <BookCard
+          v-for="book in filteredBooks"
+          :key="book.id"
+          :book="book"
+          @edit="handleEdit"
+          @delete="handleDelete"
+          @viewDetails="handleViewDetails"
+        />
+      </div>
+
+      <p v-if="filteredBooks.length === 0" class="text-center text-gray-500 mt-10">
+        No books found.
+      </p>
+    </div>
+  </div>
 </template>
 
 <script setup>
-import BookCard from '@/components/BookCard.vue';
-import { ref } from 'vue';
+import BookCard from '@/components/BookCard.vue'
+import axios from 'axios'
+import { ref, computed, onMounted } from 'vue'
 
-const books = ref([
-    {
-        id: 1,
-        title: "The Great Gatsby",
-        author: "F. Scott Fitzgerald",
-        description: "A classic novel set in the Roaring Twenties.",
-        cover: "https://covers.openlibrary.org/b/id/7222246-L.jpg"
-    },
-    {
-        id: 2,
-        title: "To Kill a Mockingbird",
-        author: "Harper Lee",
-        description: "A story of racial injustice and childhood innocence.",
-        cover: "https://covers.openlibrary.org/b/id/8228691-L.jpg"
-    },
-    {
-        id: 3,
-        title: "1984",
-        author: "George Orwell",
-        description: "A dystopian novel about totalitarianism and surveillance.",
-        cover: "https://covers.openlibrary.org/b/id/7222246-L.jpg"
-    }
-]);
+const books = ref([])
+const searchTerm = ref('')
+
+// Fetch books from API on mount
+onMounted(async () => {
+  try {
+    const res = await axios.get('http://127.0.0.1:8000/api/books')
+    // Adjust this according to your API response structure:
+    // For example, if your API returns { data: [...] } use res.data.data
+    books.value = res.data.data || res.data || []
+  } catch (error) {
+    console.error('Failed to fetch books:', error)
+  }
+})
+
+// Filter books by title
+const filteredBooks = computed(() => {
+  return books.value.filter(book =>
+    book.title.toLowerCase().includes(searchTerm.value.toLowerCase())
+  )
+})
 
 const handleEdit = (book) => {
-    // Handle edit logic here
-    console.log("Editing book:", book);
+  console.log('Editing book:', book)
 }
 
 const handleDelete = (book) => {
-    // Handle delete logic here
-    console.log("Deleting book:", book);
+  console.log('Deleting book:', book)
 }
 
 const handleViewDetails = (book) => {
-    // Handle view details logic here
-    console.log("Viewing details for book:", book);
+  console.log('Viewing details for book:', book)
 }
-
 </script>
 
-<style lang="scss" scoped>
-
+<style scoped>
+/* Add your styles here */
 </style>
