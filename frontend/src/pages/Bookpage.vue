@@ -1,9 +1,62 @@
 <template>
-        <h1 class="text-2xl font-bold text-center mb-6 p-5 bg-orange-300 m-3">Book Page</h1>
-        <input type="text" placeholder="Search books..." class="w-80 p-2 border border-gray-300 rounded-md mb-4 m-1 ml-237" />
+        <h1 class="text-2xl font-bold text-center mb-6 p-5 m-3">Book Page</h1>
+        <input type="text" placeholder="Search books..." class="w-80 p-2 border border-gray-300 rounded-md mb-4 m-1 ml-236" />
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <BookCard
+                    v-for="book in books"
+                    :key="book.id"
+                    :book="book"
+                    @edit="handleEdit"
+                    @delete="handleDelete"
+                    @viewDetails="handleViewDetails"
+                />
+            </div>  
+        </div>
 </template>
 
 <script setup>
+import BookCard from '@/components/BookCard.vue';
+import { ref } from 'vue';
+
+const books = ref([
+    {
+        id: 1,
+        title: "The Great Gatsby",
+        author: "F. Scott Fitzgerald",
+        description: "A classic novel set in the Roaring Twenties.",
+        cover: "https://covers.openlibrary.org/b/id/7222246-L.jpg"
+    },
+    {
+        id: 2,
+        title: "To Kill a Mockingbird",
+        author: "Harper Lee",
+        description: "A story of racial injustice and childhood innocence.",
+        cover: "https://covers.openlibrary.org/b/id/8228691-L.jpg"
+    },
+    {
+        id: 3,
+        title: "1984",
+        author: "George Orwell",
+        description: "A dystopian novel about totalitarianism and surveillance.",
+        cover: "https://covers.openlibrary.org/b/id/7222246-L.jpg"
+    }
+]);
+
+const handleEdit = (book) => {
+    // Handle edit logic here
+    console.log("Editing book:", book);
+}
+
+const handleDelete = (book) => {
+    // Handle delete logic here
+    console.log("Deleting book:", book);
+}
+
+const handleViewDetails = (book) => {
+    // Handle view details logic here
+    console.log("Viewing details for book:", book);
+}
 
 </script>
 
