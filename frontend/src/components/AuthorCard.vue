@@ -10,7 +10,7 @@
             :alt="author.name"
             class="w-full h-full object-cover"
           />
-          <span v-else class="text-orange-600 text-lg font-semibold">
+          <span v-else class="text-green-600 text-lg font-semibold">
             {{ getInitials(author.name) }}
           </span>
         </div>
@@ -21,7 +21,7 @@
               v-for="star in 5" 
               :key="star"
               class="material-symbols-outlined text-sm"
-              :class="star <= Math.floor(author.rating) ? 'text-yellow-400' : 'text-gray-300'"
+              :class="star <= Math.floor(author.rating) ? 'text-green-600' : 'text-gray-300'"
             >
               star
             </span>
@@ -41,19 +41,19 @@
     <!-- Author Details -->
     <div class="grid grid-cols-2 gap-4 text-sm mb-4">
       <div class="flex items-center gap-2">
-        <span class="material-symbols-outlined text-orange-500 text-base">calendar_today</span>
+        <span class="material-symbols-outlined text-green-500 text-base">calendar_today</span>
         <span class="text-gray-600">Born:</span>
       </div>
       <span class="text-gray-900">{{ formatDate(author.dateOfBirht) }}</span>
 
       <div class="flex items-center gap-2">
-        <span class="material-symbols-outlined text-orange-500 text-base">location_on</span>
+        <span class="material-symbols-outlined text-green-500 text-base">location_on</span>
         <span class="text-gray-600">From:</span>
       </div>
       <span class="text-gray-900">{{ author.nationality }}</span>
 
       <div class="flex items-center gap-2">
-        <span class="material-symbols-outlined text-orange-500 text-base">menu_book</span>
+        <span class="material-symbols-outlined text-green-500 text-base">menu_book</span>
         <span class="text-gray-600">Books:</span>
       </div>
       <span class="text-gray-900">{{ author.booksCount }}</span>
@@ -82,7 +82,7 @@
     <div class="flex gap-2 pt-4">
       <button 
         @click="$emit('viewBooks', author.id)"
-        class="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-orange-50 border border-orange-200 text-orange-700 rounded-md hover:bg-orange-100 transition-colors text-sm"
+        class="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-orange-50 border border-orange-200 text-green-700 rounded-md hover:bg-orange-100 transition-colors text-sm"
       >
         <span class="material-symbols-outlined text-base">menu_book</span>
         View Books

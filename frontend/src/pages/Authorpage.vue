@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-gray-50">
-    <h1 class="text-2xl font-bold text-center mb-6 p-5 bg-orange-300 m-3">Author Page</h1>
+    <h1 class="text-2xl font-bold text-center mb-6 p-5 bg-green-300 m-3">Author Page</h1>
     <div class="searchbar flex justify-end items-end">
     <input type="text" placeholder="Search authors..." class="w-80 p-2 border border-gray-300 rounded-md mb-4 m-1" />
   </div>
