@@ -13,6 +13,7 @@ class Books extends Model
         'isbn',
         'publication_year',
         'number_of_copies',
+        'url',
         'categories',
     ];
 }
