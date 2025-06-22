@@ -11,7 +11,7 @@ const routes = [
         component: Homepage
     },
     {
-        path : "/book",
+        path : "/books",
         name : "Book",
         component: Bookpage
     },
@@ -21,7 +21,7 @@ const routes = [
         component: Authorpage
     },
     {
-        path : "/member",
+        path : "/members",
         name : "Member",
         component: Memberpage
     }
