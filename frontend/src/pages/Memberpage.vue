@@ -1,49 +1,53 @@
 <template>
-  <div class="min-h-screen bg-gray-50 p-6">
+  <div class="pt-24 min-h-screen bg-gray-50 px-4 sm:px-6 lg:px-8">
     <div class="max-w-5xl mx-auto">
-      <h1 class="text-4xl font-extrabold text-green-700 mb-8 text-center">👥 Member Management</h1>
+      <!-- Header -->
+      <h1 class="text-4xl font-extrabold text-green-700 mb-8 text-center">
+        👥 Member Management
+      </h1>
 
-      <!-- Search bar with icon -->
-      <div class="relative max-w-md mx-auto mb-8">
-        <span class="absolute inset-y-0 left-3 flex items-center text-gray-400">
-          🔍
-        </span>
+      <!-- Search -->
+      <div class="relative max-w-md mx-auto mb-10">
+        <span class="absolute inset-y-0 left-3 flex items-center text-gray-400 text-lg">🔍</span>
         <input
           v-model="query"
           type="search"
           placeholder="Search by ID or name..."
-          class="w-full pl-10 pr-4 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 shadow-sm transition"
+          class="w-full pl-10 pr-4 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 shadow-sm transition-all"
         />
       </div>
 
-      <!-- Members grid -->
+      <!-- Member Cards -->
       <div v-if="filteredMembers.length" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <div
           v-for="member in filteredMembers"
           :key="member.id"
-          class="bg-white rounded-xl shadow-md hover:shadow-xl transition p-5 flex items-center space-x-4"
+          class="bg-white p-5 rounded-2xl shadow-md hover:shadow-xl transition flex items-start gap-4"
         >
+          <!-- Avatar Initial -->
           <div
-            class="flex-shrink-0 w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-2xl font-bold select-none"
+            class="flex-shrink-0 w-14 h-14 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-xl font-bold"
           >
             {{ member.fullName.charAt(0).toUpperCase() }}
           </div>
-          <div class="flex flex-col flex-grow">
+
+          <!-- Info -->
+          <div class="flex flex-col">
             <h2 class="text-lg font-semibold text-gray-800">
               {{ member.fullName }}
             </h2>
-            <p class="text-sm text-gray-500 mb-1">ID: {{ member.id }}</p>
-            <p class="text-sm text-gray-600">
-              <span class="font-medium">Email:</span> {{ member.email }}<br />
-              <span class="font-medium">Phone:</span> {{ member.phone }}<br />
-              <span class="font-medium">Address:</span> {{ member.address }}
-            </p>
+            <p class="text-sm text-gray-500">ID: {{ member.id }}</p>
+            <div class="mt-1 text-sm text-gray-700 space-y-0.5">
+              <p><strong>Email:</strong> {{ member.email }}</p>
+              <p><strong>Phone:</strong> {{ member.phone }}</p>
+              <p><strong>Address:</strong> {{ member.address }}</p>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- No results message -->
-      <p v-else class="text-center text-gray-500 mt-20 text-xl select-none">
+      <!-- No Results -->
+      <p v-else class="text-center text-gray-500 mt-20 text-xl">
         🚫 No members found.
       </p>
     </div>
