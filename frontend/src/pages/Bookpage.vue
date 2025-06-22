@@ -1,6 +1,14 @@
 <template>
         <h1 class="text-2xl font-bold text-center mb-6 p-5 m-3">Book Page</h1>
-        <input type="text" placeholder="Search books..." class="w-80 p-2 border border-gray-300 rounded-md mb-4 m-1 ml-236" />
+        <div class="flex mb-6 wrap justify-end">
+            <input type="text" placeholder="Search books..." class="w-80 p-2 border border-gray-300 rounded-md mb-4 m-1" />
+            <input v-model="authorFilter" type="text" placeholder="Filter by author..." class="w-80 p-2 border border-gray-300 rounded-md mb-4 m-1" />
+        </div>
+        
+        <button class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors m-1 ml-9 ">
+                Add New Book
+        </button>
+        
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <BookCard
@@ -42,6 +50,17 @@ const books = ref([
         cover: "https://covers.openlibrary.org/b/id/7222246-L.jpg"
     }
 ]);
+
+// const search = ref('');
+// const authorFilter = ref('');
+
+// const filteredBooks = computed(() => {
+//     return books.value.filter(book => {
+//         const matchesTitle = book.title.toLowerCase().includes(search.value.toLowerCase());
+//         const matchesAuthor = book.author.toLowerCase().includes(authorFilter.value.toLowerCase());
+//         return matchesTitle && matchesAuthor;
+//     })
+// })
 
 const handleEdit = (book) => {
     // Handle edit logic here
