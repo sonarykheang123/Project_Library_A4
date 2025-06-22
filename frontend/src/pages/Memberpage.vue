@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
     <div class="max-w-4xl mx-auto">
       <!-- Header -->
-      <h1 class="text-2xl font-semibold text-green-600 mb-6 text-center">Member Management</h1>
+      <h1 class="text-2xl font-semibold text-green-600 mb-6 text-center mt-10">Member Management</h1>
 
       <!-- Search and Add New Member -->
       <div class="flex flex-col sm:flex-row gap-4 mb-6">
