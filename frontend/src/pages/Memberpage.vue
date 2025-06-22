@@ -109,16 +109,32 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import axios from 'axios'
+import { ref, computed, onMounted } from 'vue'
 
-const members = ref([
-  { id: 1, name: 'Sok Dara', email: 'dara@example.com', phone: '012345678', address: 'Phnom Penh' },
-  { id: 2, name: 'Chanthy Kim', email: 'chanthy@example.com', phone: '098765432', address: 'Siem Reap' },
-  { id: 3, name: 'Sreynich Chhoeurn', email: 'nich@example.com', phone: '011122233', address: 'Phnom Penh' },
-])
+const members = ref([])
 
 const newMember = ref({ name: '', email: '', phone: '', address: '' })
-let nextId = members.value.length + 1
+const nextId = ref(members.value.length + 1)
+
+onMounted(async () => {
+  try {
+    const res = await axios.get('http://127.0.0.1:8000/api/members')
+    console.log('API Response:', res.data)
+    if (Array.isArray(res.data.data)) {
+      members.value = res.data.data
+      nextId.value = Math.max(...members.value.map(m => m.id)) + 1
+    } else {
+      console.warn('Unexpected API response format:', res.data)
+      members.value = []
+      nextId.value = 1
+    }
+  } catch (e) {
+    console.error('Failed to fetch members', e)
+    members.value = []
+    nextId.value = 1
+  }
+})
 
 const searchQuery = ref('')
 const filteredMembers = computed(() => {
@@ -131,9 +147,15 @@ const filteredMembers = computed(() => {
 const editingId = ref(null)
 const editMember = ref({})
 
-const addMember = () => {
-  members.value.push({ id: nextId++, ...newMember.value })
-  clearForm()
+const addMember = async () => {
+  try {
+    const res = await axios.post('http://127.0.0.1:8000/api/members/add', newMember.value)
+    members.value.push(res.data.data)
+    clearForm()
+  }
+  catch (err) {
+    console.error('Failed to add member', err)
+  }
 }
 
 const clearForm = () => {
@@ -150,17 +172,28 @@ const cancelEdit = () => {
   editMember.value = {}
 }
 
-const updateMember = (id) => {
-  const index = members.value.findIndex(m => m.id === id)
-  if (index !== -1) {
-    members.value[index] = { id, ...editMember.value }
+const updateMember = async(id) => {
+  try {
+    const res = await axios.put(`http://127.0.0.1:8000/api/members/update/${id}`, editMember.value)
+    const index = members.value.findIndex((m) => m.id === id)
+    if (index !== -1) {
+      members.value[index] = res.data.data 
+    }
     cancelEdit()
+  } catch (err) {
+    console.error('Failed to update member', err)
   }
 }
 
-const deleteMember = (id) => {
-  if (confirm('Are you sure you want to delete this member?')) {
+const deleteMember = async(id) => {
+  if (!confirm('Are you sure you want to delete this member?')) return
+
+  try {
+    await axios.delete(`http://127.0.0.1:8000/api/members/delete/${id}`)
     members.value = members.value.filter(m => m.id !== id)
+  } catch (err) {
+    console.error('Failed to delete member', err)
+    alert('Failed to delete member. Please try again.')
   }
 }
 
