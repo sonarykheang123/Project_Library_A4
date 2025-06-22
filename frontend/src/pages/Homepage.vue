@@ -5,29 +5,7 @@
       Manage your books, authors, and members easily with this sleek dashboard.
     </p>
 
-    <div class="flex gap-6">
-      <router-link
-        to="/books"
-        class="px-8 py-4 bg-white text-green-600 font-semibold rounded-lg shadow-lg hover:bg-green-100 transition"
-      >
-        📚 Books
-      </router-link>
-
-      <router-link
-        to="/members"
-        class="px-8 py-4 bg-white text-green-600 font-semibold rounded-lg shadow-lg hover:bg-green-100 transition"
-      >
-        👥 Members
-      </router-link>
-
-
-      <router-link
-        to="/author"
-        class="px-8 py-4 bg-white text-green-600 font-semibold rounded-lg shadow-lg hover:bg-green-100 transition"
-      >
-        👥 Authors
-      </router-link>
-    </div>
+  
   </div>
 </template>
 
