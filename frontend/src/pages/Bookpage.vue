@@ -1,13 +1,40 @@
 <template>
         <h1 class="text-2xl font-bold text-center mb-6 p-5 m-3">Book Page</h1>
-        <div class="flex mb-6 wrap justify-end">
-            <input type="text" placeholder="Search books..." class="w-80 p-2 border border-gray-300 rounded-md mb-4 m-1" />
-            <input v-model="authorFilter" type="text" placeholder="Filter by author..." class="w-80 p-2 border border-gray-300 rounded-md mb-4 m-1" />
+        <div class="flex mb-6 wrap justify-end gap-4">
+            <input type="text" placeholder="Search books..." class="rounded-md border border-gray-300 px-4 py-1.5 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-400 transition-all duration-300" />
+            <input v-model="authorFilter" type="text" placeholder="Filter by author..." class="rounded-md border border-gray-300 px-4 py-1.5 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-400 transition-all duration-300" />
         </div>
         
-        <button class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors m-1 ml-9 ">
+        <button class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors m-1 ml-9 "
+        @click="showAddForm = true"
+        >
                 Add New Book
         </button>
+
+        <!-- Add Book Form Modal -->
+  <div v-if="showAddForm" class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+      <h2 class="text-xl font-bold mb-4">Add New Book</h2>
+      <form @submit.prevent="addBook">
+        <div class="mb-3">
+          <label class="block mb-1 font-medium">Title</label>
+          <input v-model="newBook.title" type="text" class="w-full border rounded px-3 py-1.5" required />
+        </div>
+        <div class="mb-3">
+          <label class="block mb-1 font-medium">EBN</label>
+          <input v-model="newBook.ebn" type="text" class="w-full border rounded px-3 py-1.5" required />
+        </div>
+        <div class="mb-3">
+          <label class="block mb-1 font-medium">Publish Year</label>
+          <input v-model="newBook.publicyear" type="number" class="w-full border rounded px-3 py-1.5" required />
+        </div>
+        <div class="flex gap-2 justify-end">
+          <button type="button" @click="showAddForm = false" class="px-4 py-1 rounded bg-gray-200 hover:bg-gray-300">Cancel</button>
+          <button type="submit" class="px-4 py-1 rounded bg-green-500 text-white hover:bg-green-600">Add</button>
+        </div>
+      </form>
+    </div>
+  </div>
         
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -51,17 +78,25 @@ const books = ref([
     }
 ]);
 
-// const search = ref('');
-// const authorFilter = ref('');
+const showAddForm = ref(false);
+const newBook = ref({
+  title: "",
+  ebn: "",
+  publicyear: "",
+});
 
-// const filteredBooks = computed(() => {
-//     return books.value.filter(book => {
-//         const matchesTitle = book.title.toLowerCase().includes(search.value.toLowerCase());
-//         const matchesAuthor = book.author.toLowerCase().includes(authorFilter.value.toLowerCase());
-//         return matchesTitle && matchesAuthor;
-//     })
-// })
-
+function addBook() {
+  books.value.push({
+    id: Date.now(),
+    title: newBook.value.title,
+    author: "Unknown", // You can add an author field to the form if needed
+    description: `EBN: ${newBook.value.ebn}, Year: ${newBook.value.publicyear}`,
+    cover: "https://via.placeholder.com/150x200?text=No+Cover"
+  });
+  newBook.value = { title: "", ebn: "", publicyear: "" };
+  showAddForm.value = false;
+}
+const authorFilter = ref("");
 const handleEdit = (book) => {
     // Handle edit logic here
     console.log("Editing book:", book);
