@@ -1,8 +1,8 @@
 <template>
   <div class="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+          <h1 class="text-2xl font-bold text-center mb-10 p-5 bg-green-300 mt-12">Member Page</h1>
     <div class="max-w-4xl mx-auto">
-      <!-- Header -->
-      <h1 class="text-2xl font-semibold text-green-600 mb-6 text-center mt-10">Member Management</h1>
 
       <!-- Search and Add New Member -->
       <div class="flex flex-col sm:flex-row gap-4 mb-6">
