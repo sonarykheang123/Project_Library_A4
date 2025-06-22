@@ -5,7 +5,7 @@
             <input v-model="authorFilter" type="text" placeholder="Filter by author..." class="w-80 p-2 border border-gray-300 rounded-md mb-4 m-1" />
         </div>
         
-        <button class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors m-1 ml-9 ">
+        <button class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors m-1 ml-9 ">
                 Add New Book
         </button>
         
