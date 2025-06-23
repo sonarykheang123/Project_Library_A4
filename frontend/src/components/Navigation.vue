@@ -27,9 +27,9 @@ import { ref } from 'vue';
 
 const navItems = ref([
   { label: "Home", path: "/", icon: "home" },
-  { label: "Book", path: "/book", icon: "menu_book" },
+  { label: "Book", path: "/books", icon: "menu_book" },
   { label: "Author", path: "/author", icon: "person" },
-  { label: "Member", path: "/member", icon: "group" },
+  { label: "Member", path: "/members", icon: "group" },
 ]);
 
 const route = useRoute();
