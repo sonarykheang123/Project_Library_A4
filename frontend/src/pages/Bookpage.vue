@@ -1,15 +1,14 @@
 <template>
-        <h1 class="text-2xl font-bold text-center mb-6 p-5 m-3 mt-20">Book Page</h1>
-        <div class="flex mb-6 wrap justify-end gap-4">
-            <input type="text" placeholder="Search books..." class="rounded-md border border-gray-300 px-4 py-1.5 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-400 transition-all duration-300" />
-            <input v-model="authorFilter" type="text" placeholder="Filter by book name..." class="rounded-md border border-gray-300 px-4 py-1.5 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-400 transition-all duration-300" />
-        </div>
-        
-        <button class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors m-1 ml-9 "
+        <h1 class="text-2xl font-bold text-center mb-6 p-5 bg-green-300 m-3 mt-20">Book Page</h1>
+        <div class="flex mt-10 ml-9 gap-4 justify-center">
+          <button class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors m-1 ml-9 "
         @click="showAddForm = true"
         >
-                Add New Book
+                Add Book
         </button>
+            <input v-model="searchBook" type="text" placeholder="Search books..." class="rounded-md border border-gray-300 px-4 py-1 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-400 transition-all duration-300 mr-30 pr-60 m-1" />
+        </div>
+        
 
         <!-- Add Book Form Modal -->
  <!-- ...existing code... -->
