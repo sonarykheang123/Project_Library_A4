@@ -141,53 +141,82 @@ import axios from 'axios'
 import { ref, computed, onMounted } from 'vue'
 
 const members = ref([])
-
-let nextId = members.value.length + 1
 const searchQuery = ref('')
-const filteredMembers = computed(() => {
-  const q = searchQuery.value.toLowerCase()
-  return members.value.filter(m => m.name.toLowerCase().includes(q) || String(m.id).includes(q))
-})
-
 const showAddForm = ref(false)
 const editingId = ref(null)
-const formData = ref({ name: '', email: '', phone: '', address: '' })
 
+const formData = ref({
+  name: '',
+  email: '',
+  phone: '',
+  address: ''
+})
+
+// Fetch members on mount
+onMounted(async () => {
+  try {
+    const res = await axios.get('http://127.0.0.1:8000/api/members')
+    if (Array.isArray(res.data.data)) {
+      members.value = res.data.data
+    } else {
+      console.warn('Unexpected API response format:', res.data)
+    }
+  } catch (e) {
+    console.error('Failed to fetch members', e)
+  }
+})
+
+// Computed filtered members based on search
+const filteredMembers = computed(() => {
+  const q = searchQuery.value.toLowerCase()
+  return members.value.filter(
+    m =>
+      m.name.toLowerCase().includes(q) ||
+      String(m.id).includes(q)
+  )
+})
+
+// Add new member
 const addMember = async () => {
   try {
-    const res = await axios.post('http://127.0.0.1:8000/api/members/add', newMember.value)
+    const res = await axios.post('http://127.0.0.1:8000/api/members/add', formData.value)
     members.value.push(res.data.data)
     clearForm()
-  }
-  catch (err) {
+    showAddForm.value = false
+  } catch (err) {
     console.error('Failed to add member', err)
   }
 }
 
-const clearForm = () => {
-  newMember.value = { name: '', email: '', phone: '', address: '' }
-}
-
+// Start editing
 const startEdit = (member) => {
   editingId.value = member.id
   formData.value = { ...member }
-  showAddForm.value = true
 }
 
-const updateMember = async(id) => {
+// Cancel add/edit form
+const cancelForm = () => {
+  showAddForm.value = false
+  editingId.value = null
+  clearForm()
+}
+
+// Update existing member
+const updateMember = async (id) => {
   try {
-    const res = await axios.put(`http://127.0.0.1:8000/api/members/update/${id}`, editMember.value)
+    const res = await axios.put(`http://127.0.0.1:8000/api/members/update/${id}`, formData.value)
     const index = members.value.findIndex((m) => m.id === id)
     if (index !== -1) {
-      members.value[index] = res.data.data 
+      members.value[index] = res.data.data
     }
-    cancelEdit()
+    cancelForm()
   } catch (err) {
     console.error('Failed to update member', err)
   }
 }
 
-const deleteMember = async(id) => {
+// Delete member
+const deleteMember = async (id) => {
   if (!confirm('Are you sure you want to delete this member?')) return
 
   try {
@@ -199,12 +228,17 @@ const deleteMember = async(id) => {
   }
 }
 
-const cancelForm = () => {
-  showAddForm.value = false
-  editingId.value = null
-  formData.value = { name: '', email: '', phone: '', address: '' }
+// Clear form fields
+const clearForm = () => {
+  formData.value = {
+    name: '',
+    email: '',
+    phone: '',
+    address: ''
+  }
 }
 </script>
+
 
 <style scoped>
 /* Minimal custom styling */
