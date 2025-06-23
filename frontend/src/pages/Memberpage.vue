@@ -137,13 +137,10 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import axios from 'axios'
+import { ref, computed, onMounted } from 'vue'
 
-const members = ref([
-  { id: 1, name: 'Sok Dara', email: 'dara@example.com', phone: '012345678', address: 'Phnom Penh' },
-  { id: 2, name: 'Chanthy Kim', email: 'chanthy@example.com', phone: '098765432', address: 'Siem Reap' },
-  { id: 3, name: 'Sreynich Chhoeurn', email: 'nich@example.com', phone: '011122233', address: 'Phnom Penh' },
-])
+const members = ref([])
 
 let nextId = members.value.length + 1
 const searchQuery = ref('')
@@ -156,9 +153,19 @@ const showAddForm = ref(false)
 const editingId = ref(null)
 const formData = ref({ name: '', email: '', phone: '', address: '' })
 
-const addMember = () => {
-  members.value.push({ id: nextId++, ...formData.value })
-  cancelForm()
+const addMember = async () => {
+  try {
+    const res = await axios.post('http://127.0.0.1:8000/api/members/add', newMember.value)
+    members.value.push(res.data.data)
+    clearForm()
+  }
+  catch (err) {
+    console.error('Failed to add member', err)
+  }
+}
+
+const clearForm = () => {
+  newMember.value = { name: '', email: '', phone: '', address: '' }
 }
 
 const startEdit = (member) => {
@@ -167,17 +174,28 @@ const startEdit = (member) => {
   showAddForm.value = true
 }
 
-const updateMember = (id) => {
-  const index = members.value.findIndex(m => m.id === id)
-  if (index !== -1) {
-    members.value[index] = { id, ...formData.value }
-    cancelForm()
+const updateMember = async(id) => {
+  try {
+    const res = await axios.put(`http://127.0.0.1:8000/api/members/update/${id}`, editMember.value)
+    const index = members.value.findIndex((m) => m.id === id)
+    if (index !== -1) {
+      members.value[index] = res.data.data 
+    }
+    cancelEdit()
+  } catch (err) {
+    console.error('Failed to update member', err)
   }
 }
 
-const deleteMember = (id) => {
-  if (confirm('Are you sure you want to delete this member?')) {
+const deleteMember = async(id) => {
+  if (!confirm('Are you sure you want to delete this member?')) return
+
+  try {
+    await axios.delete(`http://127.0.0.1:8000/api/members/delete/${id}`)
     members.value = members.value.filter(m => m.id !== id)
+  } catch (err) {
+    console.error('Failed to delete member', err)
+    alert('Failed to delete member. Please try again.')
   }
 }
 
