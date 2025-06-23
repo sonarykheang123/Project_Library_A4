@@ -121,7 +121,13 @@ const addBook = async () => {
     resetForm()
 
   } catch (err) {
-    console.log('Failed to add/edit book:', err);
+    // console.log('Failed to add/edit book:', err);
+    if (err.response?.status === 500 && err.response?.data?.message?.includes('Duplicate entry')) {
+      alert("A book with this ISBN already exists. Please use a unique ISBN.");
+    } else {
+      console.log("Failed to add/edit book:", err);
+      alert("An error occurred. Please try again.");
+    }
   }
 
 }
@@ -179,12 +185,11 @@ const handleDelete = async (book) => {
 function resetForm() {
   newBook.value = {
     title: "",
-    author: "",
     isbn: "",
-    publicyear: "",
-    numbercopy: "",
-    category: "",
-    urlimg: "",
+    publication_year: "",
+    number_of_copies: "",
+    categories: "",
+    url: "",
   }
   showAddForm.value = false
   isEditMode.value = false
