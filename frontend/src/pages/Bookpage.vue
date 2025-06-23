@@ -24,28 +24,24 @@
           <input v-model="newBook.title" :readonly="isViewMode" type="text" class="w-full border rounded px-3 py-1.5" required />
         </div>
         <div class="mb-3">
-          <label class="block mb-1 font-medium">Author</label>
-          <input v-model="newBook.author" :readonly="isViewMode" type="text" class="w-full border rounded px-3 py-1.5" required />
-        </div>
-        <div class="mb-3">
           <label class="block mb-1 font-medium">IsBn</label>
           <input v-model="newBook.isbn" :readonly="isViewMode" type="text" class="w-full border rounded px-3 py-1.5" required />
         </div>
         <div class="mb-3">
           <label class="block mb-1 font-medium">Publish Year</label>
-          <input v-model="newBook.publicyear" :readonly="isViewMode" type="number" class="w-full border rounded px-3 py-1.5" required />
+          <input v-model="newBook.publication_year" :readonly="isViewMode" type="number" class="w-full border rounded px-3 py-1.5" required />
         </div>
         <div class="mb-3">
           <label class="block mb-1 font-medium">Number Copies</label>
-          <input v-model="newBook.numbercopy" :readonly="isViewMode" type="number" class="w-full border rounded px-3 py-1.5" required />
+          <input v-model="newBook.number_of_copies" :readonly="isViewMode" type="number" class="w-full border rounded px-3 py-1.5" required />
         </div>
         <div class="mb-3">
           <label class="block mb-1 font-medium">Categories</label>
-          <input v-model="newBook.category" :readonly="isViewMode" type="text" class="w-full border rounded px-3 py-1.5" required />
+          <input v-model="newBook.categories" :readonly="isViewMode" type="text" class="w-full border rounded px-3 py-1.5" required />
         </div>
         <div class="mb-3">
           <label class="block mb-1 font-medium">URL Image</label>
-          <input v-model="newBook.urlimg" :readonly="isViewMode" type="text" class="w-full border rounded px-3 py-1.5" required />
+          <input v-model="newBook.url" :readonly="isViewMode" type="text" class="w-full border rounded px-3 py-1.5" required />
         </div>
         <div class="flex gap-3 justify-end md:col-span-2">
           <button type="button" @click="resetForm" class="px-6 py-1 rounded bg-gray-200 hover:bg-gray-300 mt-6 mb-3">Close</button>
@@ -86,23 +82,24 @@ const selectedBookId = ref(null)
 
 const newBook = ref({
   title: "",
-  author: "",
   isbn: "",
-  publicyear: "",
-  numbercopy: "",
-  category: "",
-  urlimg: "",
+  publication_year: "",
+  number_of_copies: "",
+  categories: "",
+  url: "",
 })
 
-// Fetch books from API on mount
-onMounted(async () => {
+
+const fetchBooks = async () => {
   try {
     const res = await axios.get('http://127.0.0.1:8000/api/books')
-    books.value = res.data.data  
+    books.value = res.data.data
   } catch (error) {
     console.error('Failed to fetch books:', error)
   }
-})
+}
+
+onMounted(fetchBooks)
 
 // Filter books by title
 const filteredBooks = computed(() => {
@@ -111,38 +108,71 @@ const filteredBooks = computed(() => {
   )
 })
 
-function addBook() {
-  if (isEditMode.value && selectedBookId.value !== null) {
-    // Update existing book
-    const idx = books.value.findIndex(b => b.id === selectedBookId.value)
-    if (idx !== -1) {
-      books.value[idx] = { id: selectedBookId.value, ...newBook.value }
+const addBook = async () => {
+  try{
+      if (isEditMode.value && selectedBookId.value !== null) {
+      await axios.put(`http://127.0.0.1:8000/api/books/update/${selectedBookId.value}`, newBook.value)
+      await fetchBooks()
+
+    } else {
+      await axios.post('http://127.0.0.1:8000/api/books/add', newBook.value)
+      await fetchBooks()
     }
-  } else {
-    // Add new book
-    books.value.push({
-      id: Date.now(),
-      ...newBook.value,
-    })
+    resetForm()
+
+  } catch (err) {
+    console.log('Failed to add/edit book:', err);
   }
-  resetForm()
+
 }
 
-function handleEdit(book) {
-  Object.assign(newBook.value, book)
-  selectedBookId.value = book.id
-  isEditMode.value = true
-  isViewMode.value = false
-  showAddForm.value = true
+const handleEdit = async (book) => {
+  try {
+    const res = await axios.get(`http://127.0.0.1:8000/api/books/${book.id}`)
+    Object.assign(newBook.value, res.data.data)
+    selectedBookId.value = book.id
+    isEditMode.value = true
+    isViewMode.value = false
+    showAddForm.value = true
+  } catch (error) {
+    console.error("Failed to load book for editing:", error)
+  }
 }
 
-function handleViewDetails(book) {
-   alert(`Book Details:\nTitle: ${book.title}\nAuthor: ${book.author}\nISBN: ${book.isbn}\nPublished Year: ${book.publicyear}\nNumber of Copies: ${book.numbercopy}\nCategory: ${book.category}`);
-}
+const handleViewDetails = async (book) => {
+  console.log("handleViewDetails called with book:", book);
+  if (!book?.id) {
+    console.error("Missing book id:", book);
+    return;
+  }
+  try {
+    const res = await axios.get(`http://127.0.0.1:8000/api/books/${book.id}`);
+    const data = res.data.data;
+    
+    alert(
+      `Book Details:\n` +
+      `Title: ${data.title}\n` +
+      `ISBN: ${data.isbn}\n` +
+      `Published Year: ${data.publication_year}\n` +
+      `Number of Copies: ${data.number_of_copies}\n` +
+      `Category: ${data.categories}`
+    );
+    
+  } catch (error) {
+    console.error("Failed to fetch book details:", error);
+  }
+};
 
-function handleDelete(book) {
-  if (confirm(`Are you sure you want to delete "${book.title}"?`)) {
-    books.value = books.value.filter(b => b.id !== book.id);
+
+const handleDelete = async (book) => {
+  try {
+    const confirmDelete = confirm(`Are you sure you want to delete "${book.title}"?`)
+    if (confirmDelete) {
+      await axios.delete(`http://127.0.0.1:8000/api/books/delete/${book.id}`)
+      books.value = books.value.filter(b => b.id !== book.id)
+    }
+  } catch (err) {
+    console.error('Failed to delete book:', err)
   }
 }
 

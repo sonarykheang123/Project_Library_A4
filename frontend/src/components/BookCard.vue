@@ -1,19 +1,19 @@
 <template>
   <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 p-5 flex flex-col">
     <img
-      :src="book.urlimg"
+      :src="book.url"
       :alt="book.title"
       class="w-full h-48 object-cover rounded-md mb-4"
     />
     <h3 class="text-lg font-bold text-gray-900 mb-1">{{ book.title }}</h3>
     <p class="text-sm text-gray-600 mb-2">By {{ book.author }}</p>
     <p class="text-sm text-gray-500 mb-2">ISBN: {{ book.isbn }}</p>
-    <p class="text-sm text-gray-500 mb-2">Published: {{ book.publicyear }}</p>
-    <p class="text-sm text-gray-500 mb-2">Copies: {{ book.numbercopy }}</p>
-    <p class="text-sm text-gray-500 mb-2">Category: {{ book.category }}</p>
+    <p class="text-sm text-gray-500 mb-2">Published: {{ book.publication_year }}</p>
+    <p class="text-sm text-gray-500 mb-2">Copies: {{ book.number_of_copies }}</p>
+    <p class="text-sm text-gray-500 mb-2">Category: {{ book.categories }}</p>
     <div class="flex gap-2 mt-auto">
       <button
-        @click="$emit('viewDetails', book.id)"
+        @click="$emit('viewDetails', book)"
         class="flex-1 px-3 py-1 bg-blue-50 border border-blue-200 text-blue-700 rounded-md hover:bg-blue-100 transition-colors text-xs"
       >
         View Details
