@@ -6,7 +6,7 @@
     </div>
 
     <!-- Navigation Items -->
-    <div class="flex gap-10 items-center">
+    <div class="flex gap-10 items-center mr-20">
       <RouterLink
         v-for="item in navItems"
         :key="item.label"
@@ -17,18 +17,6 @@
         <span class="material-icons">{{ item.icon }}</span>
         {{ item.label }}
       </RouterLink>
-    </div>
-
-    <!-- Search -->
-    <div class="relative">
-      <input
-        type="search"
-        placeholder="Search books, authors..."
-        class="rounded-md border border-gray-300 px-4 py-1.5 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-400 transition-all duration-300"
-      />
-      <span class="material-icons absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400">
-        search
-      </span>
     </div>
   </nav>
 </template>
