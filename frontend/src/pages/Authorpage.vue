@@ -25,7 +25,7 @@
         />
       </div>
 
-      <!-- Optional: No Results Message -->
+      <!--No Results Message -->
       <p v-if="filteredAuthors.length === 0" class="text-center text-gray-500 mt-10">
         No authors found.
       </p>
@@ -50,8 +50,6 @@ const authors = ref([
     dateOfBirht: '1775-12-16',
     nationality: 'British',
     booksCount: 6,
-    rating: 4.8,
-    genres: ['Romance', 'Social Commentary', 'Classic Literature'],
   },
   {
     id: '2',
@@ -61,8 +59,6 @@ const authors = ref([
     dateOfBirht: '1947-09-21',
     nationality: 'American',
     booksCount: 64,
-    rating: 4.6,
-    genres: ['Horror', 'Supernatural', 'Thriller', 'Fantasy'],
   },
   {
     id: '3',
@@ -72,8 +68,6 @@ const authors = ref([
     dateOfBirht: '1890-09-15',
     nationality: 'British',
     booksCount: 66,
-    rating: 4.7,
-    genres: ['Mystery', 'Detective Fiction', 'Crime'],
   }
 ])
 
